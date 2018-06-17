@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace Web_API_Authentication.Controllers
 {
+    [Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
