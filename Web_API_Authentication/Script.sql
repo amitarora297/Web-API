@@ -17,3 +17,5 @@ Purpose VARCHAR(MAX)
 INSERT INTO MedMaster(MedName,Purpose) VALUES ('TELMA','HIGH BLOOD PRESSURE')
 INSERT INTO MedMaster(MedName,Purpose) VALUES ('STORVAS','CHOLESTRAL')
 INSERT INTO MedMaster(MedName,Purpose) VALUES ('LIPIVAS','CHOLESTRAL')
+
+select * from MedMaster
