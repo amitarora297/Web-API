@@ -19,3 +19,15 @@ INSERT INTO MedMaster(MedName,Purpose) VALUES ('STORVAS','CHOLESTRAL')
 INSERT INTO MedMaster(MedName,Purpose) VALUES ('LIPIVAS','CHOLESTRAL')
 
 select * from MedMaster
+
+
+ALTER PROC AddMed
+@MedName MedName,
+@Purpose MedPurpose,
+@MedID INT Output
+AS
+BEGIN 
+	INSERT INTO MedMaster(MedName,Purpose) VALUES (@MedName,@Purpose)
+	SET @MedID  = @@Identity
+	return @MedID
+END 

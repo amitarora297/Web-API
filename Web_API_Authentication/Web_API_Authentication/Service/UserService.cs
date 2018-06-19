@@ -1,4 +1,5 @@
-﻿using Web_API_Authentication.Models;
+﻿using API_Data_Layer;
+using API_Data_Layer.Model;
 
 namespace Web_API_Authentication.Service
 {

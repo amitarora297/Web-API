@@ -1,33 +1,70 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using API_Data_Layer;
 using API_Data_Layer.Model;
 
 namespace Web_API_Authentication.Controllers
 {
+    [RoutePrefix("api/Medicine")]
+    [Authorize]
     public class MedicineController : ApiController
     {
         [HttpGet]
         // GET api/<controller>
+        [Route("All")]
         public IHttpActionResult Get()
         {
             MedMaster medMaster = new MedMaster();
-            return Ok (medMaster.GetMedicines());
+            var result = medMaster.GetMedicines();
+            if (result !=  null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+            
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        [Route("Find/{id}")]
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            MedMaster medMaster = new MedMaster();;
+            var result = medMaster.GetMedicines(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        [HttpPost]
+        [Route("Add")]
+        public IHttpActionResult Post([FromBody]Medicine medicine)
         {
+            MedMaster medMaster = new MedMaster();
+            if (string.IsNullOrWhiteSpace( medicine.MedicineName))
+            {
+                return BadRequest("You must supply medicine name");
+            }
+            if (string.IsNullOrWhiteSpace(medicine.Purpose))
+            {
+                return BadRequest("You must supply medicine purpose");
+            }
+            var result = medMaster.AddMedicine(medicine);
+            if (result > 0)
+            {
+                var url = new Uri(string.Format("localhost:50428/api/medicine/Find/{0}", result));
+                return Created(url,medicine);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // PUT api/<controller>/5

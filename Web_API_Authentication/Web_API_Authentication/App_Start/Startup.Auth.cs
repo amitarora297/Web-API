@@ -1,16 +1,17 @@
 ﻿using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Web_API_Authentication.Provider;
 
 namespace Web_API_Authentication
 {
     public partial class Startup
     {
+
         public static OAuthAuthorizationServerOptions oAuthServerOptions { get; set; }
+        /// <summary>
+        /// Constructor
+        /// </summary>
         static Startup()
         {
             oAuthServerOptions = new OAuthAuthorizationServerOptions()
@@ -21,7 +22,10 @@ namespace Web_API_Authentication
                 AllowInsecureHttp = true
             };
         }
-
+        /// <summary>
+        /// Configure Auth
+        /// </summary>
+        /// <param name="app"></param>
         public void ConfigureAuth(IAppBuilder app)
         {
             app.UseOAuthBearerTokens(oAuthServerOptions);
