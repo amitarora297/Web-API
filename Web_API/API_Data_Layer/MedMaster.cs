@@ -1,6 +1,7 @@
 ﻿using API_Data_Layer.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace API_Data_Layer
         /// </summary>
         public MedMaster()
         {
-            string con = "Data Source=AMIT\\AMITPC;Initial Catalog=MedDB;Integrated Security=true";
+            string con = ConfigurationManager.ConnectionStrings["DbCon"].ConnectionString; 
             cnn = new SqlConnection(con);
             cnn.Open();
         }

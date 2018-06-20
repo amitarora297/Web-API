@@ -8,13 +8,16 @@ namespace Web_API_Authentication.Service
 
         public User getUser (string username, string password )
         {
-            if (username != "amit" || password != "@mit@rora297")
+            if ((username != "amit" && password != "@mit@rora297") || (username != "amit1" && password != "@mit@rora297"))
             {
                 return null;
             }
             else
             {
-                return new User() { UserID = 1, UserName = "amit" };
+                if (username == "amit")
+                    return new User() { UserID = 1, UserName = "amit" };
+                else
+                    return new User() { UserID = 1, UserName = "amit1" };
             }
         }
     }

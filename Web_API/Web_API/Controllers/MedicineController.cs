@@ -5,8 +5,9 @@ using API_Data_Layer.Model;
 
 namespace Web_API_Authentication.Controllers
 {
+    
+    [Authorize(Users="Amit")]
     [RoutePrefix("api/Medicine")]
-    [Authorize]
     public class MedicineController : ApiController
     {
         [HttpGet]
@@ -43,7 +44,7 @@ namespace Web_API_Authentication.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
+        [Route("~/Add")]
         public IHttpActionResult Post([FromBody]Medicine medicine)
         {
             MedMaster medMaster = new MedMaster();
