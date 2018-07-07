@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json.Serialization;
 using System.Web.Http;
 
 namespace Web_API_Authentication
@@ -19,6 +20,13 @@ namespace Web_API_Authentication
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+
+            var formatters = config.Formatters;
+            formatters.Remove(formatters.XmlFormatter);
+
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver() ;
+            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
         }
     }
 }

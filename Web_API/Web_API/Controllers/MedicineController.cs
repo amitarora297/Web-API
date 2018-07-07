@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Net.Http;
 using System.Web.Http;
 using API_Data_Layer;
 using API_Data_Layer.Model;
+using Web_API;
 
 namespace Web_API_Authentication.Controllers
 {
-    
-    [Authorize(Users="Amit")]
+    [MedicineExceptionFIlter]
+    [Authorize(Users = "Amit")]
     [RoutePrefix("api/Medicine")]
     public class MedicineController : ApiController
     {
@@ -17,22 +19,6 @@ namespace Web_API_Authentication.Controllers
         {
             MedMaster medMaster = new MedMaster();
             var result = medMaster.GetMedicines();
-            if (result !=  null)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return NotFound();
-            }
-            
-        }
-
-        [Route("Find/{id}")]
-        public IHttpActionResult Get(int id)
-        {
-            MedMaster medMaster = new MedMaster();;
-            var result = medMaster.GetMedicines(id);
             if (result != null)
             {
                 return Ok(result);
@@ -41,6 +27,51 @@ namespace Web_API_Authentication.Controllers
             {
                 return NotFound();
             }
+
+        }
+
+        // HttpResponseException
+        //[Route("Find/{id}")]
+        //[AllowAnonymous]
+        //public IHttpActionResult Get(int id)
+        //{
+        //    MedMaster medMaster = new MedMaster(); ;
+        //    var result = medMaster.GetMedicines(id);
+        //    if (result != null)
+        //    {
+        //        return Ok(result);
+        //    }
+        //    else
+        //    {
+        //        HttpResponseMessage msg = new HttpResponseMessage()
+        //        {
+        //            Content = new StringContent("Medicine with given id does not exist."),
+        //            //ReasonPhrase = "Medcine does not exist in database",
+        //            StatusCode = System.Net.HttpStatusCode.NotFound
+
+
+        //        };
+        //        throw new HttpResponseException(msg);
+        //    }
+        //}
+
+        // HttpError
+
+        [Route("Find/{id}")]
+        [AllowAnonymous]
+        public HttpResponseMessage Get(int id)
+        {
+            MedMaster medMaster = new MedMaster(); ;
+            var result = medMaster.GetMedicines(id);
+            if (result != null)
+            {
+                return Request.CreateResponse(System.Net.HttpStatusCode.OK,result);
+            }
+            else
+            {
+                string msg = "Medicine id does not exist";
+                return Request.CreateErrorResponse(System.Net.HttpStatusCode.NotFound,msg);
+            }
         }
 
         [HttpPost]
@@ -48,7 +79,7 @@ namespace Web_API_Authentication.Controllers
         public IHttpActionResult Post([FromBody]Medicine medicine)
         {
             MedMaster medMaster = new MedMaster();
-            if (string.IsNullOrWhiteSpace( medicine.MedicineName))
+            if (string.IsNullOrWhiteSpace(medicine.MedicineName))
             {
                 return BadRequest("You must supply medicine name");
             }
@@ -60,7 +91,7 @@ namespace Web_API_Authentication.Controllers
             if (result > 0)
             {
                 var url = new Uri(string.Format("localhost:50428/api/medicine/Find/{0}", result));
-                return Created(url,medicine);
+                return Created(url, medicine);
             }
             else
             {
